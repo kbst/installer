@@ -1,0 +1,28 @@
+---
+- name: Stage Name
+  description: Short description of this stage.
+  vars:
+    http_port: 80
+    max_clients: 200
+  steps:
+  - name: log info message
+    log.info:
+      msg: info
+  - name: log warn message
+    log.warn:
+      msg: warn
+  - name: log debug message
+    log.debug:
+      msg: debug
+  - name: list pods in default namespace
+    resource.list:
+      kind: pod
+      namespace: default
+  - name: list pods in all namespaces
+    resource.list:
+      kind: pod
+      all-namespaces: true
+    register: all_pods
+  - name: log info message
+    log.info:
+      msg: info {{all_pods.items[0].metadata.namespace}}/{{all_pods.items[0].metadata.name}}
