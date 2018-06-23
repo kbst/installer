@@ -4,18 +4,17 @@ from jinja2 import Template
 
 
 class Step:
-    name = ''
-    method = None
-    params = None
-    register = ''
 
     def __init__(self, step):
         assert 'name' in step, 'name is a mandatory field for all steps'
         self.name = step['name']
 
+        self.register = None
         if 'register' in step:
             self.register = step['register']
 
+        self.method = None
+        self.params = None
         for action in step:
             if action in ['name', 'register']:
                 continue
@@ -43,3 +42,6 @@ class Step:
                 rendered_input[key] = template.render(**variables)
 
         return self.method(action, rendered_input)
+
+    def __repr__(self):
+        return self.name

@@ -1,28 +1,32 @@
 ---
-- name: Stage Name
-  description: Short description of this stage.
-  vars:
-    http_port: 80
-    max_clients: 200
+- name: Stage 1
+  description: First stage
   steps:
-  - name: log info message
+  - name: log info message stage 1
     log.info:
-      msg: info
-  - name: log warn message
+      msg: info stage 1
+  - name: log warn message stage 1
     log.warn:
-      msg: warn
-  - name: log debug message
+      msg: warn stage 1
+  - name: log debug message stage 1
     log.debug:
-      msg: debug
-  - name: list pods in default namespace
+      msg: debug stage 1
+  - name: list pods in default namespace stage 1
     resource.list:
       kind: pod
       namespace: default
-  - name: list pods in all namespaces
+
+- name: Stage 2
+  description: Second stage
+  steps:
+  - name: log info message stage 2
+    log.info:
+      msg: info stage 2
+  - name: get pods in all namespaces stage 2
     resource.list:
       kind: pod
       all-namespaces: true
     register: all_pods
-  - name: log info message
+  - name: list pods in all namespaces stage 2
     log.info:
-      msg: info {{all_pods.items[0].metadata.namespace}}/{{all_pods.items[0].metadata.name}}
+      msg: info stage 2 {{all_pods.items[0].metadata.namespace}}/{{all_pods.items[0].metadata.name}}

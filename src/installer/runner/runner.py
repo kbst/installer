@@ -1,14 +1,12 @@
 class Runner:
-    scenario = None
-    state = None
 
     def __init__(self, scenario):
         self.scenario = scenario
         self.state = RunnerState()
 
     def run(self):
-        for event in self.scenario.events:
-            for step in event.steps:
+        for stage in self.scenario.stages:
+            for step in stage.steps:
                 _result = step.execute(variables=self.state.all())
 
                 if step.register:
@@ -16,7 +14,9 @@ class Runner:
 
 
 class RunnerState:
-    _variables = dict()
+
+    def __init__(self):
+        self._variables = dict()
 
     def all(self):
         return self._variables

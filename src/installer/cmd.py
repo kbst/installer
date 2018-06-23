@@ -16,8 +16,8 @@ import logging
 
 from docopt import docopt
 
-from .runner import Runner
-from .scenario import Scenario
+from runner import Runner
+from scenario import Scenario # noqa: import falsely deteced as 3rd party
 
 
 if __name__ == '__main__':

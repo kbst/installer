@@ -1,10 +1,12 @@
 from yaml import CLoader as Loader, load
 
-from .event import Event
+from .stage import Stage
 
 
 class Scenario:
-    events = []
+
+    def __init__(self):
+        self.stages = []
 
     @staticmethod
     def load(file_name):
@@ -14,8 +16,8 @@ class Scenario:
 
     def _load_scenario(self, file_name):
         with open(file_name) as scenario_file:
-            events = load(scenario_file, Loader=Loader)
+            stages = load(scenario_file, Loader=Loader)
 
-        for event in events:
-            e = Event(event)
-            self.events.append(e)
+        for stage in stages:
+            s = Stage(stage)
+            self.stages.append(s)
