@@ -4,7 +4,7 @@ import { ScenarioService } from '../scenario.service';
 import { Scenario } from '../scenario';
 
 @Component({
-  selector: 'app-viewer',
+  selector: 'app-steps',
   templateUrl: './steps.component.html',
   styleUrls: ['./steps.component.css']
 })

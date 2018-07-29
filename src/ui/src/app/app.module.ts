@@ -17,13 +17,15 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { RunnerComponent } from './runner/runner.component';
 import { ScenarioService } from './scenario.service';
 import { StepsComponent } from './steps/steps.component';
+import { InputsComponent } from './inputs/inputs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
     RunnerComponent,
-    StepsComponent
+    StepsComponent,
+    InputsComponent
   ],
   imports: [
     BrowserModule,

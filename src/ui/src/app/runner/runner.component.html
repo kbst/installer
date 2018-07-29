@@ -1,7 +1,7 @@
 <mat-horizontal-stepper #stepper>
     <mat-step editable="false" completed="scenario.status == 1">
         <ng-template matStepLabel>Pre-flight check</ng-template>
-        <app-viewer></app-viewer>
+        <app-inputs></app-inputs>
         <div>
             <button mat-flat-button
                     matStepperNext
@@ -13,12 +13,12 @@
 
     <mat-step editable="false" completed="scenario.status == 1">
         <ng-template matStepLabel>Install</ng-template>
-        <app-viewer></app-viewer>
+        <app-steps></app-steps>
     </mat-step>
 
     <mat-step editable="false" completed="scenario.status == 1">
         <ng-template matStepLabel>Review</ng-template>
-        <app-viewer></app-viewer>
+        <app-steps></app-steps>
     </mat-step>
 </mat-horizontal-stepper>
 
