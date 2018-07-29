@@ -1,34 +1,17 @@
 ---
-- name: Input
-  description: First stage
-  inputs:
-  - name: asd
-  steps:
-  - name: log info message stage 1
-    log.info:
-      msg: info stage 1
-  - name: log warn message stage 1
-    log.warn:
-      msg: warn stage 1
-  - name: log debug message stage 1
-    log.debug:
-      msg: debug stage 1
-  - name: list pods in default namespace stage 1
-    resource.list:
-      kind: pod
-      namespace: default
 
-- name: Install
+- name: Namespaced PODs
   description: Second stage
+  inputs:
+  - name: name
+  - name: namespace
+  - name: test
   steps:
-  - name: log info message stage 2
-    log.info:
-      msg: info stage 2
-  - name: get pods in all namespaces stage 2
+  - name: get pods in selected namespace
     resource.list:
       kind: pod
-      all-namespaces: true
+      namespaces: "{{input['namespace']}}"
     register: all_pods
-  - name: list pods in all namespaces stage 2
+  - name: list pods in selected namespaces
     log.info:
       msg: info stage 2 {{all_pods['items'][0]['metadata']['namespace']}}/{{all_pods['items'][0]['metadata']['name']}}

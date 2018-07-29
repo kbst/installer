@@ -1,3 +1,17 @@
-<p>
-  inputs works!
-</p>
+<div *ngIf="scenario">
+    <mat-list *ngFor="let stage of scenario.stages">
+        <mat-list-item>
+            <span>{{ stage.name }}</span>
+        </mat-list-item>
+        <form (ngSubmit)="onSubmit()"
+              [formGroup]="form">
+            <mat-list-item *ngFor="let input_value of input_values">
+                <div  class="form-row">
+                  <app-input-value [input_value]="input_value"
+                                   [form]="form">
+                  </app-input-value>
+                </div>
+            </mat-list-item>
+        </form>
+    </mat-list>
+</div>
