@@ -5,6 +5,20 @@ export enum Status {
     SKIPPED = 3
 }
 
+export class Input {
+    public id: number;
+    public stage_id: number;
+    public name: string;
+    public value: string;
+
+    constructor(obj: any) {
+        this.id = obj.id;
+        this.stage_id = obj.stage_id;
+        this.name = obj.name;
+        this.value = obj.value;
+    }
+}
+
 export class Step {
     public id: number;
     public stage_id: number;
@@ -19,16 +33,6 @@ export class Step {
         this.result = obj.result;
         const enumVal: Status = (<any>Status)[obj.status.name];
         this.status = enumVal;
-    }
-}
-
-export class Input {
-    public id: number;
-    public name: string;
-
-    constructor(obj: any) {
-        this.id = obj.id;
-        this.name = obj.name;
     }
 }
 

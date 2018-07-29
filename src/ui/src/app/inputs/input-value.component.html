@@ -3,11 +3,11 @@
 
   <div [ngSwitch]="input_value.controlType">
 
-    <input *ngSwitchCase="'textbox'" [formControlName]="input_value.key"
-            [id]="input_value.key" [type]="input_value.type">
+    <input *ngSwitchCase="'textbox'" [formControlName]="input_value.label"
+            [id]="input_value.id" [type]="input_value.type">
 
-    <select [id]="input_value.key" *ngSwitchCase="'dropdown'" [formControlName]="input_value.key">
-      <option *ngFor="let opt of input_value.options" [value]="opt.key">{{opt.value}}</option>
+    <select [id]="input_value.id" *ngSwitchCase="'dropdown'" [formControlName]="input_value.label">
+      <option *ngFor="let opt of input_value.options" [value]="opt.id">{{opt.value}}</option>
     </select>
 
   </div>

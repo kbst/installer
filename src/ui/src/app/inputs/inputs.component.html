@@ -3,12 +3,12 @@
         <mat-list-item>
             <span>{{ stage.name }}</span>
         </mat-list-item>
-        <form (ngSubmit)="onSubmit()"
-              [formGroup]="form">
+        <form [formGroup]="form">
             <mat-list-item *ngFor="let input_value of input_values">
                 <div  class="form-row">
                   <app-input-value [input_value]="input_value"
-                                   [form]="form">
+                                   [form]="form"
+                                   (change)="update_inputs(input_value, form)">
                   </app-input-value>
                 </div>
             </mat-list-item>

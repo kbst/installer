@@ -3,15 +3,16 @@
 - name: Namespaced PODs
   description: Second stage
   inputs:
-  - name: name
   - name: namespace
-  - name: test
+    value: default
+  - name: name
+    value: test
   steps:
   - name: get pods in selected namespace
     resource.list:
       kind: pod
-      namespaces: "{{input['namespace']}}"
+      namespace: "{{inputs['namespace']}}"
     register: all_pods
   - name: list pods in selected namespaces
     log.info:
-      msg: info stage 2 {{all_pods['items'][0]['metadata']['namespace']}}/{{all_pods['items'][0]['metadata']['name']}}
+      msg: "info stage 2 {{variables['all_pods']}}"

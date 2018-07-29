@@ -17,7 +17,7 @@ class Stage:
 
         self.inputs = []
         for input_id, input in enumerate(stage['inputs']):
-            i = Input(input_id, input)
+            i = Input(input_id, stage_id, input)
             self.inputs.append(i)
 
         assert 'steps' in stage

@@ -37,7 +37,7 @@ class Step:
         if 'register' in step:
             self.register = step['register']
 
-    def execute(self, variables=None):
+    def execute(self, inputs=None, variables=None):
         if self.status is not Status.PENDING:
             return None
 
@@ -52,7 +52,8 @@ class Step:
             except TypeError:
                 rendered_input[key] = value
             else:
-                rendered_input[key] = template.render(**variables)
+                rendered_input[key] = template.render(
+                    **{'inputs': inputs, 'variables': variables})
 
         try:
             result = self.method(action, rendered_input)
