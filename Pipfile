@@ -8,6 +8,8 @@ kubernetes = "*"
 docopt = "*"
 PyYAML = "*"
 "jinja2" = "*"
+json-rpc = "*"
+tornado = "*"
 
 [dev-packages]
 

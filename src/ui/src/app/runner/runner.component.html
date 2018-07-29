@@ -1,0 +1,30 @@
+<mat-horizontal-stepper #stepper>
+    <mat-step editable="false" completed="scenario.status == 1">
+        <ng-template matStepLabel>Pre-flight check</ng-template>
+        <app-viewer></app-viewer>
+        <div>
+            <button mat-flat-button
+                    matStepperNext
+                    (click)="run_scenario()">
+                Install
+            </button>
+        </div>
+    </mat-step>
+
+    <mat-step editable="false" completed="scenario.status == 1">
+        <ng-template matStepLabel>Install</ng-template>
+        <app-viewer></app-viewer>
+    </mat-step>
+
+    <mat-step editable="false" completed="scenario.status == 1">
+        <ng-template matStepLabel>Review</ng-template>
+        <app-viewer></app-viewer>
+    </mat-step>
+</mat-horizontal-stepper>
+
+<mat-accordion *ngIf="scenario">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header></mat-expansion-panel-header>
+        <pre>{{ scenario | json }}</pre>
+    </mat-expansion-panel>
+</mat-accordion>

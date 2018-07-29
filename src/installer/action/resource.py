@@ -15,7 +15,7 @@ def list(action, action_params):
         action, action_params)
     method_params = _get_method_params(action_params)
 
-    return getattr(obj, method_name)(*tuple(method_params))
+    return getattr(obj, method_name)(*tuple(method_params)).to_dict()
 
 
 def read(action, action_params):
