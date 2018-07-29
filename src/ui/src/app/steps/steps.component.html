@@ -1,0 +1,12 @@
+<div *ngIf="scenario">
+    <mat-list *ngFor="let stage of scenario.stages">
+        <mat-list-item>
+            <span>{{ stage.name }}</span>
+        </mat-list-item>
+        <mat-list-item *ngFor="let step of stage.steps">
+            <mat-icon *ngIf="step.status == 0" matListIcon>hourglass_empty</mat-icon>
+            <mat-icon *ngIf="step.status == 1" matListIcon>done</mat-icon>
+            <span>{{ step.name }}</span>
+        </mat-list-item>
+    </mat-list>
+</div>

@@ -1,6 +1,8 @@
 ---
-- name: Stage 1
+- name: Input
   description: First stage
+  inputs:
+  - name: asd
   steps:
   - name: log info message stage 1
     log.info:
@@ -16,7 +18,7 @@
       kind: pod
       namespace: default
 
-- name: Stage 2
+- name: Install
   description: Second stage
   steps:
   - name: log info message stage 2

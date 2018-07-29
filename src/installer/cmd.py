@@ -16,7 +16,7 @@ import logging
 
 from docopt import docopt
 
-from runner import Runner
+from runner import Runner, serve
 from scenario import Scenario # noqa: import falsely deteced as 3rd party
 
 
@@ -31,6 +31,6 @@ if __name__ == '__main__':
     logging.debug(f'Parsed arguments: \n{arguments}')
 
     if arguments['serve']:
-        s = Scenario.load(file_name=arguments['<scenario>'])
-        r = Runner(s)
-        r.run()
+        r = Runner()
+        r.scenario = Scenario.load(file_name=arguments['<scenario>'])
+        serve()
