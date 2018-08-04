@@ -5,7 +5,8 @@ import { InputValueBase } from './input-value-base';
 
 @Component({
   selector: 'app-input-value',
-  templateUrl: './input-value.component.html'
+  templateUrl: './input-value.component.html',
+  styleUrls: ['./input-value.component.css']
 })
 export class InputValueComponent {
   @Input() input_value: InputValueBase<any>;

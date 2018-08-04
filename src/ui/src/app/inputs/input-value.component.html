@@ -1,16 +1,21 @@
-<div [formGroup]="form">
-  <label [attr.for]="input_value.key">{{input_value.label}}</label>
+<mat-form-field [formGroup]="form"
+                class="form-field-full-width">
 
-  <div [ngSwitch]="input_value.controlType">
+    <div [ngSwitch]="input_value.controlType">
 
-    <input *ngSwitchCase="'textbox'" [formControlName]="input_value.label"
-            [id]="input_value.id" [type]="input_value.type">
+        <input matInput
+               class="form-field-full-width"
+               *ngSwitchCase="'textbox'"
+               [formControlName]="input_value.label"
+               [id]="input_value.id"
+               [type]="input_value.type"
+               placeholder="{{input_value.label}}">
 
-    <select [id]="input_value.id" *ngSwitchCase="'dropdown'" [formControlName]="input_value.label">
-      <option *ngFor="let opt of input_value.options" [value]="opt.id">{{opt.value}}</option>
-    </select>
+        <select [id]="input_value.id" *ngSwitchCase="'dropdown'" [formControlName]="input_value.label">
+            <option *ngFor="let opt of input_value.options" [value]="opt.id">{{opt.value}}</option>
+        </select>
 
-  </div>
+    </div>
 
-  <div class="errorMessage" *ngIf="!isValid">{{input_value.label}} is required</div>
-</div>
+    <div class="errorMessage" *ngIf="!isValid">{{input_value.label}} is required</div>
+</mat-form-field>

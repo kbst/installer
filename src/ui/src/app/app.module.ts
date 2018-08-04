@@ -4,8 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import {
   MatButtonModule,
+  MatCardModule,
   MatExpansionModule,
+  MatGridListModule,
   MatIconModule,
+  MatInputModule,
   MatToolbarModule,
   MatListModule,
   MatSidenavModule,
@@ -35,8 +38,11 @@ import { InputValueService } from './inputs/input-value.service';
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    MatCardModule,
     MatExpansionModule,
+    MatGridListModule,
     MatIconModule,
+    MatInputModule,
     MatToolbarModule,
     MatListModule,
     MatSidenavModule,
