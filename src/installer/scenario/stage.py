@@ -1,3 +1,4 @@
+from .input import Input
 from .step import Step
 from .status import Status
 
@@ -14,6 +15,11 @@ class Stage:
         assert 'description' in stage
         self.description = stage['description']
 
+        self.inputs = []
+        for input_id, input in enumerate(stage['inputs']):
+            i = Input(input_id, stage_id, input)
+            self.inputs.append(i)
+
         assert 'steps' in stage
         self.steps = []
 
@@ -29,9 +35,13 @@ class Stage:
         stage['id'] = self.id
         stage['name'] = self.name
         stage['description'] = self.description
+        stage['inputs'] = []
         stage['steps'] = []
         stage['status'] = {'code': self.status.value,
                            'name': self.status.name}
+
+        for input in self.inputs:
+            stage['inputs'].append(input.to_dict())
 
         for step in self.steps:
             stage['steps'].append(step.to_dict())

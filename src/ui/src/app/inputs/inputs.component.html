@@ -1,0 +1,19 @@
+<div *ngIf="scenario">
+    <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-grid-tile *ngFor="let stage of scenario.stages">
+            <mat-card class="input-card">
+                <mat-card-header>
+                    <mat-card-title>{{ stage.name }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div *ngFor="let input_value of input_values">
+                        <app-input-value [input_value]="input_value"
+                            [form]="form"
+                            (change)="update_inputs(input_value, form)">
+                        </app-input-value>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

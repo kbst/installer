@@ -8,6 +8,7 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 from jsonrpc.utils import DatetimeDecimalEncoder
 
 from scenario.status import Status
+from scenario.input import Input
 
 
 class Runner:
@@ -19,6 +20,7 @@ class Runner:
         if not hasattr(cls, 'instance') or not cls.instance:
             cls.instance = super().__new__(cls)
             cls._scenario = None
+            cls.instance.inputs = dict()
             cls.instance.variables = dict()
         return cls.instance
 
@@ -29,6 +31,22 @@ class Runner:
     @scenario.setter
     def scenario(self, scenario):
         self._scenario = scenario
+
+    def get_all_inputs(self):
+        return_inputs = {}
+        for name in self.inputs:
+            stage_id, input_id = self.inputs[name]
+            input = self.scenario.stages[stage_id].inputs[input_id]
+            return_inputs[name] = input.value
+        return return_inputs
+
+    def get_input(self, name):
+        stage_id, input_id = self.inputs[name]
+        input = self.scenario.stages[stage_id].inputs[input_id]
+        return input.value
+
+    def set_input(self, name, stage_id, input_id):
+        self.inputs[name] = (stage_id, input_id)
 
     def get_all_vars(self):
         return_vars = {}
@@ -57,17 +75,20 @@ def get_scenario(**kwargs):
 def run(**kwargs):
     logging.info("run method called")
     r = Runner()
-
     for stage in r.scenario.stages:
         if stage.status == Status.SUCCESS:
             continue
+
+        for input in stage.inputs:
+            r.set_input(input.name, input.stage_id, input.id)
 
         for step in stage.steps:
             if step.status == Status.SUCCESS:
                 continue
 
             try:
-                result = step.execute(variables=r.get_all_vars())
+                result = step.execute(inputs=r.get_all_inputs(),
+                                      variables=r.get_all_vars())
             except Exception as e:
                 # Mark scenario and stage as errors
                 r.scenario.status = Status.ERROR
@@ -88,6 +109,21 @@ def run(**kwargs):
 
     # Sceneario completed successfully
     r.scenario.status = Status.SUCCESS
+
+    return r.scenario.to_dict()
+
+
+@dispatcher.add_method
+def update_inputs(scenario, **kwargs):
+    logging.info("update_inputs method called")
+    r = Runner()
+
+    for stage in scenario['stages']:
+        s = r.scenario.stages[stage['id']]
+        for input in stage['inputs']:
+            i = Input(input['id'], input['stage_id'], input)
+            s.inputs[i.id] = i
+            r.set_input(i.name, i.stage_id, i.id)
 
     return r.scenario.to_dict()
 

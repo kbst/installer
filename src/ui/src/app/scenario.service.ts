@@ -50,4 +50,10 @@ export class ScenarioService {
       return this.scenario$;
   }
 
+  public update_inputs(scenario) {
+      const payload = format.request(0, 'update_inputs', [scenario]);
+      this.ws$.next(JSON.parse(payload));
+      return this.scenario$;
+  }
+
 }

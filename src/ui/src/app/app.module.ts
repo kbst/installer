@@ -1,10 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import {
   MatButtonModule,
+  MatCardModule,
   MatExpansionModule,
+  MatGridListModule,
   MatIconModule,
+  MatInputModule,
   MatToolbarModule,
   MatListModule,
   MatSidenavModule,
@@ -17,27 +21,37 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { RunnerComponent } from './runner/runner.component';
 import { ScenarioService } from './scenario.service';
 import { StepsComponent } from './steps/steps.component';
+import { InputsComponent } from './inputs/inputs.component';
+import { InputValueComponent } from './inputs/input-value.component';
+import { InputValueService } from './inputs/input-value.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
     RunnerComponent,
-    StepsComponent
+    StepsComponent,
+    InputsComponent,
+    InputValueComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    MatCardModule,
     MatExpansionModule,
+    MatGridListModule,
     MatIconModule,
+    MatInputModule,
     MatToolbarModule,
     MatListModule,
     MatSidenavModule,
-    MatStepperModule
+    MatStepperModule,
+    ReactiveFormsModule
   ],
   providers: [
-      ScenarioService
+      ScenarioService,
+      InputValueService
   ],
   bootstrap: [AppComponent]
 })
