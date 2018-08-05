@@ -11,5 +11,5 @@ import { InputValueBase } from './input-value-base';
 export class InputValueComponent {
   @Input() input_value: InputValueBase<any>;
   @Input() form: FormGroup;
-  get isValid() { return this.form.controls[this.input_value.label].valid; }
+  get isValid() { return this.form.controls[this.input_value.name].valid; }
 }

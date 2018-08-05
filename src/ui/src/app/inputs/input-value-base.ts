@@ -1,27 +1,42 @@
 export class InputValueBase<T> {
-  value: T;
   id: number;
   stage_id: number;
+  type: string;
+  name: string;
+  value: T;
   label: string;
+  min: number;
+  max: number;
+  step: number;
   required: boolean;
   order: number;
   controlType: string;
 
   constructor(options: {
-      value?: T,
       id?: number,
       stage_id?: number,
+      type?: string;
+      name?: string,
+      value?: T,
       label?: string,
+      min?: number,
+      max?: number,
+      step?: number,
       required?: boolean,
       order?: number,
       controlType?: string
     } = {}) {
-    this.value = options.value;
     this.id = options.id;
     this.stage_id = options.stage_id;
+    this.type = options.type;
+    this.name = options.name;
+    this.value = options.value;
     this.label = options.label || '';
+    this.min = options.min || null;
+    this.max = options.max || null;
+    this.step = options.step || null;
     this.required = !!options.required;
-    this.order = options.order === undefined ? 1 : options.order;
+    this.order = options.order === undefined ? this.id : options.order;
     this.controlType = options.controlType || '';
   }
 }

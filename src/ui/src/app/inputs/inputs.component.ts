@@ -32,7 +32,7 @@ export class InputsComponent implements OnInit {
                   for (const input of stage.inputs) {
                       // Check if we already have a form field for that input
                       const i = this.input_values.findIndex(
-                          _input_value => _input_value.label === input.name
+                          _input_value => _input_value.name === input.name
                       );
 
                       // Update existing or add new accordingly
@@ -40,16 +40,26 @@ export class InputsComponent implements OnInit {
                           const input_value = this.input_values[i];
                           input_value.id = input.id;
                           input_value.stage_id = input.stage_id;
-                          input_value.label = input.name;
+                          input_value.type = input.type;
+                          input_value.name = input.name;
                           input_value.value = input.value;
+                          input_value.label = input.label;
+                          input_value.min = input.min;
+                          input_value.max = input.max;
+                          input_value.step = input.step;
                           input_value.required = true;
                           input_value.order = 1;
                       } else {
                           this.input_values.push(new TextValue({
                               id: input.id,
                               stage_id: input.stage_id,
-                              label: input.name,
+                              type: input.type,
+                              name: input.name,
                               value: input.value,
+                              label: input.label,
+                              min: input.min,
+                              max: input.max,
+                              step: input.step,
                               required: true,
                               order: 1
                           }));

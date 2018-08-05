@@ -53,4 +53,4 @@ COPY --from=build-angular \
      /tmp/build/ui/dist/ui /opt/kbst/installer/ui
 
 WORKDIR /opt/kbst/installer
-ENTRYPOINT ["python", "cmd.py"]
+ENTRYPOINT ["python", "cmd.py", "serve", "/opt/scenario/scenario.yaml"]

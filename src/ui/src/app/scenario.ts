@@ -8,14 +8,24 @@ export enum Status {
 export class Input {
     public id: number;
     public stage_id: number;
+    public type: string;
     public name: string;
     public value: string;
+    public label: string;
+    public min: number;
+    public max: number;
+    public step: number;
 
     constructor(obj: any) {
         this.id = obj.id;
         this.stage_id = obj.stage_id;
+        this.type = obj.type;
         this.name = obj.name;
         this.value = obj.value;
+        this.label = obj.label;
+        this.min = obj.min;
+        this.max = obj.max;
+        this.step = obj.step;
     }
 }
 

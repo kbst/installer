@@ -3,10 +3,21 @@
 - name: Namespaced PODs
   description: Second stage
   inputs:
-  - name: namespace
-    value: default
   - name: name
+    label: name of the cluster
+    type: text
     value: test
+  - name: namespace
+    label: namespace to use
+    type: text
+    value: default
+  - name: replicas
+    label: number of replicas
+    type: number
+    value: 3
+    min: 2
+    max: 5
+    step: 1
   steps:
   - name: get pods in selected namespace
     resource.list:
