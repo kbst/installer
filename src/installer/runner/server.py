@@ -39,6 +39,9 @@ class WebsocketHandler(tornado.websocket.WebSocketHandler):
 def application():
     return tornado.web.Application([
         (r"/jsonrpc", WebsocketHandler),
+        (r"/(.*)", tornado.web.StaticFileHandler, {
+            "path": "/opt/kbst/installer/ui",
+            "default_filename": "index.html"})
     ])
 
 
