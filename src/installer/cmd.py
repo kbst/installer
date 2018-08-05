@@ -24,9 +24,12 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='v0.0.1')
 
     # Configure logging
-    logging.basicConfig(level=getattr(logging, 'INFO'))
+    logging_fmt = '%(asctime)s %(levelname)s %(name)s %(message)s'
+    logging.basicConfig(
+        level=getattr(logging, 'INFO'), format=logging_fmt)
     if arguments['--debug']:
-        logging.basicConfig(level=getattr(logging, 'DEBUG'))
+        logging.basicConfig(
+            level=getattr(logging, 'DEBUG'), format=logging_fmt)
 
     logging.debug(f'Parsed arguments: \n{arguments}')
 

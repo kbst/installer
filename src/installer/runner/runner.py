@@ -1,13 +1,11 @@
 import logging
-import json
 
-import tornado.ioloop
-import tornado.web
-import tornado.websocket
-from jsonrpc import JSONRPCResponseManager, dispatcher
-from jsonrpc.utils import DatetimeDecimalEncoder
+from jsonrpc import dispatcher
 
 from scenario.status import Status
+
+
+logger = logging.getLogger(__name__)
 
 
 class Runner:
@@ -66,13 +64,13 @@ class Runner:
 
 @dispatcher.add_method
 def get_scenario(**kwargs):
-    logging.info("get_scenario method called")
+    logger.info("get_scenario method called")
     return Runner().scenario.to_dict()
 
 
 @dispatcher.add_method
 def run(**kwargs):
-    logging.info("run method called")
+    logger.info("run method called")
     r = Runner()
     for stage in r.scenario.stages:
         if stage.status == Status.SUCCESS:
@@ -89,7 +87,7 @@ def run(**kwargs):
                 # Mark scenario and stage as errors
                 r.scenario.status = Status.ERROR
                 stage.status = Status.ERROR
-                logging.exception(e)
+                logger.exception(e)
                 raise e
 
             step.result = result
@@ -111,48 +109,7 @@ def run(**kwargs):
 
 @dispatcher.add_method
 def update_inputs(payload, **kwargs):
-    logging.info("update_inputs method called")
+    logger.info("update_inputs method called")
     r = Runner()
     r.scenario.update_inputs(payload)
     return r.scenario.to_dict()
-
-
-def response_serialize(obj):
-    return json.dumps(obj, cls=DatetimeDecimalEncoder)
-
-
-class WebsocketHandler(tornado.websocket.WebSocketHandler):
-
-    def check_origin(self, origin):
-        return True
-
-    def open(self):
-        logging.info("WebSocket opened")
-
-    def on_message(self, message):
-        response = JSONRPCResponseManager.handle(message, dispatcher)
-
-        if response.error:
-            logging.error(response.error)
-
-        response.serialize = response_serialize
-        self.write_message(response.json)
-
-    def on_close(self):
-        logging.info("WebSocket closed")
-
-
-def application():
-    return tornado.web.Application([
-        (r"/jsonrpc", WebsocketHandler),
-    ])
-
-
-def serve(port=4100):
-    app = application()
-    app.listen(port)
-    try:
-        tornado.ioloop.IOLoop.current().start()
-    except KeyboardInterrupt:
-        tornado.ioloop.IOLoop.current().stop()
-        exit()
