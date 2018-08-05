@@ -1,3 +1,6 @@
+#
+# Python build
+#
 FROM python:3 AS build-python
 
 RUN apt-get update \
@@ -15,6 +18,23 @@ RUN export PATH=$HOME/.local/bin:$PATH \
 
 COPY --chown=kbst:kbst src/installer /opt/kbst/installer
 
+#
+# Angular build
+#
+FROM node:8 AS build-angular
+
+RUN useradd -m kbst
+USER kbst:kbst
+
+COPY --chown=kbst:kbst src/ui /tmp/build/ui
+
+WORKDIR /tmp/build/ui
+RUN yarn install --dev
+RUN yarn build
+
+#
+# Final container
+#
 FROM python:3-slim
 
 RUN apt-get update \
@@ -25,7 +45,12 @@ USER kbst:kbst
 
 ENV PATH=/opt/kbst/.venv/bin:$PATH
 
-COPY --from=build-python --chown=kbst:kbst /opt/kbst /opt/kbst
+COPY --from=build-python \
+     --chown=kbst:kbst \
+     /opt/kbst /opt/kbst
+COPY --from=build-angular \
+     --chown=kbst:kbst \
+     /tmp/build/ui/dist/ui /opt/kbst/installer/ui
 
 WORKDIR /opt/kbst/installer
 ENTRYPOINT ["python", "cmd.py"]
