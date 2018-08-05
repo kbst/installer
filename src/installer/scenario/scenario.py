@@ -24,8 +24,12 @@ class Scenario:
             s = Stage(id, stage)
             self.stages.append(s)
 
-    def count_pending_stages(self):
-        return len(self.stages)
+    def update_inputs(self, payload):
+        for stage in self.stages:
+            for input in stage.inputs:
+                input_payload = payload['stages'][stage.id]['inputs'][input.id]
+                assert input.name == input_payload['name']
+                input.value = input_payload['value']
 
     def to_dict(self):
         scenario = {'stages': [],

@@ -8,7 +8,6 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 from jsonrpc.utils import DatetimeDecimalEncoder
 
 from scenario.status import Status
-from scenario.input import Input
 
 
 class Runner:
@@ -19,9 +18,9 @@ class Runner:
     def __new__(cls):
         if not hasattr(cls, 'instance') or not cls.instance:
             cls.instance = super().__new__(cls)
-            cls._scenario = None
-            cls.instance.inputs = dict()
-            cls.instance.variables = dict()
+            cls.instance._scenario = dict()
+            cls.instance._inputs = dict()
+            cls.instance._variables = dict()
         return cls.instance
 
     @property
@@ -32,37 +31,37 @@ class Runner:
     def scenario(self, scenario):
         self._scenario = scenario
 
-    def get_all_inputs(self):
+        # Register inputs
+        for stage in self.scenario.stages:
+            for input in stage.inputs:
+                self.register_input(input.name, input.stage_id, input.id)
+
+    def get_stage(self, id):
+        return self.scenario.stages[id]
+
+    @property
+    def inputs(self):
         return_inputs = {}
-        for name in self.inputs:
-            stage_id, input_id = self.inputs[name]
-            input = self.scenario.stages[stage_id].inputs[input_id]
+        for name in self._inputs:
+            stage_id, input_id = self._inputs[name]
+            input = self.get_stage(stage_id).inputs[input_id]
             return_inputs[name] = input.value
         return return_inputs
 
-    def get_input(self, name):
-        stage_id, input_id = self.inputs[name]
-        input = self.scenario.stages[stage_id].inputs[input_id]
-        return input.value
+    def register_input(self, name, stage_id, input_id):
+        self._inputs[name] = (stage_id, input_id)
 
-    def set_input(self, name, stage_id, input_id):
-        self.inputs[name] = (stage_id, input_id)
-
-    def get_all_vars(self):
+    @property
+    def variables(self):
         return_vars = {}
-        for name in self.variables:
-            stage_id, step_id = self.variables[name]
-            step = self.scenario.stages[stage_id].steps[step_id]
+        for name in self._variables:
+            stage_id, step_id = self._variables[name]
+            step = self.get_stage(stage_id).steps[step_id]
             return_vars[name] = step.result
         return return_vars
 
-    def get_var(self, name):
-        stage_id, step_id = self.variables[name]
-        step = self.scenario.stages[stage_id].steps[step_id]
-        return step.result
-
-    def set_var(self, name, stage_id, step_id):
-        self.variables[name] = (stage_id, step_id)
+    def register_var(self, name, stage_id, step_id):
+        self._variables[name] = (stage_id, step_id)
 
 
 @dispatcher.add_method
@@ -79,16 +78,13 @@ def run(**kwargs):
         if stage.status == Status.SUCCESS:
             continue
 
-        for input in stage.inputs:
-            r.set_input(input.name, input.stage_id, input.id)
-
         for step in stage.steps:
             if step.status == Status.SUCCESS:
                 continue
 
             try:
-                result = step.execute(inputs=r.get_all_inputs(),
-                                      variables=r.get_all_vars())
+                result = step.execute(inputs=r.inputs,
+                                      variables=r.variables)
             except Exception as e:
                 # Mark scenario and stage as errors
                 r.scenario.status = Status.ERROR
@@ -98,7 +94,7 @@ def run(**kwargs):
 
             step.result = result
             if step.register:
-                r.set_var(step.register, step.stage_id, step.id)
+                r.register_var(step.register, step.stage_id, step.id)
 
             return r.scenario.to_dict()
 
@@ -114,17 +110,10 @@ def run(**kwargs):
 
 
 @dispatcher.add_method
-def update_inputs(scenario, **kwargs):
+def update_inputs(payload, **kwargs):
     logging.info("update_inputs method called")
     r = Runner()
-
-    for stage in scenario['stages']:
-        s = r.scenario.stages[stage['id']]
-        for input in stage['inputs']:
-            i = Input(input['id'], input['stage_id'], input)
-            s.inputs[i.id] = i
-            r.set_input(i.name, i.stage_id, i.id)
-
+    r.scenario.update_inputs(payload)
     return r.scenario.to_dict()
 
 
