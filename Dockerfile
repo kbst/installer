@@ -9,14 +9,13 @@ RUN apt-get update \
 RUN useradd -m kbst
 USER kbst:kbst
 
-COPY --chown=kbst:kbst Pipfile Pipfile.lock /opt/kbst/
+COPY --chown=kbst:kbst installer/Pipfile installer/Pipfile.lock /tmp/build/
+COPY --chown=kbst:kbst installer/src /tmp/build/installer
 
-WORKDIR /opt/kbst
+WORKDIR /tmp/build
 RUN export PATH=$HOME/.local/bin:$PATH \
     && pip install --user --no-cache-dir pipenv \
     && PIPENV_VENV_IN_PROJECT=true pipenv install
-
-COPY --chown=kbst:kbst src/installer /opt/kbst/installer
 
 #
 # Angular build
@@ -26,7 +25,7 @@ FROM node:8 AS build-angular
 RUN useradd -m kbst
 USER kbst:kbst
 
-COPY --chown=kbst:kbst src/ui /tmp/build/ui
+COPY --chown=kbst:kbst ui /tmp/build/ui
 
 WORKDIR /tmp/build/ui
 RUN yarn install --dev
@@ -43,14 +42,14 @@ RUN apt-get update \
 RUN useradd -m kbst
 USER kbst:kbst
 
-ENV PATH=/opt/kbst/.venv/bin:$PATH
+ENV PATH=/app/.venv/bin:$PATH
 
 COPY --from=build-python \
      --chown=kbst:kbst \
-     /opt/kbst /opt/kbst
+     /tmp/build /app
 COPY --from=build-angular \
      --chown=kbst:kbst \
-     /tmp/build/ui/dist/ui /opt/kbst/installer/ui
+     /tmp/build/ui/dist/ui /app/installer/ui
 
-WORKDIR /opt/kbst/installer
+WORKDIR /app/installer
 ENTRYPOINT ["python", "cmd.py"]
