@@ -2,11 +2,19 @@ from sys import exit
 
 from kubernetes import client, config
 
+needs_config = True
 try:
-    config.load_kube_config()
-except FileNotFoundError:
-    exit("No '~/.kube/config' found")
+    config.load_incluster_config()
+except config.config_exception.ConfigException:
+    pass
+else:
+    needs_config = False
 
+if needs_config:
+    try:
+        config.load_kube_config()
+    except FileNotFoundError:
+        exit("No '~/.kube/config' found")
 
 def list(action, action_params):
     _common_assertions(action, action_params)
